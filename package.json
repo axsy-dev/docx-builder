@@ -1,25 +1,34 @@
 {
-  "name": "docx-builder",
-  "version": "1.0.7",
-  "description": "Easily create or merge DOCX files from Node.js",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/raulbojalil/docx-builder.git"
-  },
-  "keywords": [
-    "docx", "composition", "document", "office", "microsoft office", "microsoft word"
-  ],
-  "author": "Raúl Alberto Bojalil Becerra <me@raulbojalil.com>",
-  "dependencies": {
-    "docxtemplater": "3.0.11",
-	"jszip" : "2.6.1"
-  },
-  "bugs": {
-    "url": "https://github.com/raulbojalil/docx-builder/issues"
-  },
-  "homepage": "https://github.com/raulbojalil/docx-builder#readme"
+    "name": "docx-builder",
+    "version": "1.0.7",
+    "description": "Easily create or merge DOCX files from Node.js",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "babel src --out-dir dist"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/raulbojalil/docx-builder.git"
+    },
+    "keywords": [
+        "docx",
+        "composition",
+        "document",
+        "office",
+        "microsoft office",
+        "microsoft word"
+    ],
+    "author": "Raúl Alberto Bojalil Becerra <me@raulbojalil.com>",
+    "dependencies": {
+        "docxtemplater": "3.0.11",
+        "jszip": "2.6.1"
+    },
+    "bugs": {
+        "url": "https://github.com/raulbojalil/docx-builder/issues"
+    },
+    "homepage": "https://github.com/raulbojalil/docx-builder#readme",
+    "devDependencies": {
+        "babel-cli": "^6.26.0",
+        "babel-preset-es2015": "^6.24.1"
+    }
 }

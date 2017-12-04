@@ -2,7 +2,7 @@ var fs = require('fs');
 var Docxtemplater = require('docxtemplater');
 var JSZip = require('jszip');
 
-var systemXmlRelIds = {
+const systemXmlRelIds = {
     'styles.xml': 'rId1',
     'settings.xml': 'rId2',
     'webSettings.xml': 'rId3',
