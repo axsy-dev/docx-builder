@@ -262,6 +262,40 @@ function Document() {
         builder.push(p.replace('[CONTENT]', text));
     };
 
+    this.insertSection = function(options) {
+        const startSection =
+            '<w:p> \
+                <w:pPr> \
+                    <w:sectPr>';
+
+        const endSection =
+            '      </w:sectPr> \
+                </w:pPr> \
+             </w:p>';
+
+        builder.push(startSection);
+
+        if (options && options.orientation) {
+            builder.push(
+                '        <w:pgSz w:orient="[ORIENT]" />'.replace(
+                    '[ORIENT]',
+                    options.orientation
+                )
+            );
+        }
+
+        if (options && options.type) {
+            builder.push(
+                '        <w:type w:val="[TYPE]" />'.replace(
+                    '[TYPE]',
+                    options.type
+                )
+            );
+        }
+
+        builder.push(endSection);
+    };
+
     this.insertRaw = function(xml) {
         builder.push(xml);
     };
