@@ -16,186 +16,19 @@ const systemXmlRelIds = {
 };
 
 function Document() {
-    this._body = [];
-    this._header = [];
-    this._footer = [];
-    this._builder = this._body;
-    this._bold = false;
-    this._italic = false;
-    this._underline = false;
-    this._font = null;
-    this._size = null;
-    this._alignment = null;
+    let body = [];
+    let header = [];
+    let footer = [];
+    let builder = body;
+    let bold = false;
+    let italic = false;
+    let underline = false;
+    let font = null;
+    let size = null;
+    let alignment = null;
+    let rels = [];
 
-    this.beginHeader = function() {
-        this._builder = this._header;
-    };
-
-    this.endHeader = function() {
-        this._builder = this._body;
-    };
-
-    this.beginFooter = function() {
-        this._builder = this._footer;
-    };
-
-    this.endFooter = function() {
-        this._builder = this._body;
-    };
-
-    this.setBold = function() {
-        this._bold = true;
-    };
-
-    this.unsetBold = function() {
-        this._bold = false;
-    };
-
-    this.setItalic = function() {
-        this._italic = true;
-    };
-
-    this.unsetItalic = function() {
-        this._italic = false;
-    };
-
-    this.setUnderline = function() {
-        this._underline = true;
-    };
-
-    this.unsetUnderline = function() {
-        this._underline = false;
-    };
-
-    this.setFont = function(font) {
-        this._font = font;
-    };
-
-    this.unsetFont = function() {
-        this._font = null;
-    };
-
-    this.setSize = function(size) {
-        this._size = size;
-    };
-
-    this.unsetSize = function() {
-        this._size = null;
-    };
-
-    this.rightAlign = function() {
-        this._alignment = 'right';
-    };
-
-    this.centerAlign = function() {
-        this._alignment = 'center';
-    };
-
-    this.leftAlign = function() {
-        this._alignment = null;
-    };
-
-    this.insertPageBreak = function() {
-        var pb = '<w:p> \
-					<w:r> \
-						<w:br w:type="page"/> \
-					</w:r> \
-				  </w:p>';
-
-        this._builder.push(pb);
-    };
-
-    this.beginTable = function(options) {
-        if (!options) {
-            this._builder.push('<w:tbl>');
-        } else {
-            options = options || { borderSize: 4, borderColor: 'auto' };
-            this._builder.push(
-                '<w:tbl><w:tblPr><w:tblBorders> \
-				<w:top w:val="single" w:space="0" w:color="' +
-                    options.borderColor +
-                    '" w:sz="' +
-                    options.borderSize +
-                    '"/> \
-				<w:left w:val="single" w:space="0" w:color="' +
-                    options.borderColor +
-                    '" w:sz="' +
-                    options.borderSize +
-                    '"/> \
-				<w:bottom w:val="single" w:space="0" w:color="' +
-                    options.borderColor +
-                    '" w:sz="' +
-                    options.borderSize +
-                    '"/> \
-				<w:right w:val="single" w:space="0" w:color="' +
-                    options.borderColor +
-                    '" w:sz="' +
-                    options.borderSize +
-                    '"/> \
-				<w:insideH w:val="single" w:space="0" w:color="' +
-                    options.borderColor +
-                    '" w:sz="' +
-                    options.borderSize +
-                    '"/> \
-				<w:insideV w:val="single" w:space="0" w:color="' +
-                    options.borderColor +
-                    '" w:sz="' +
-                    options.borderSize +
-                    '"/> \
-				</w:tblBorders>	\
-			</w:tblPr>'
-            );
-        }
-    };
-
-    this.insertRow = function() {
-        this._builder.push('<w:tr><w:tc>');
-    };
-
-    this.nextColumn = function() {
-        this._builder.push('</w:tc><w:tc>');
-    };
-
-    this.nextRow = function() {
-        this._builder.push('</w:tc></w:tr><w:tr><w:tc>');
-    };
-
-    this.endTable = function() {
-        this._builder.push('</w:tc></w:tr></w:tbl>');
-    };
-
-    this.insertText = function(text) {
-        var p =
-            '<w:p>' +
-            (this._alignment
-                ? '<w:pPr><w:jc w:val="' + this._alignment + '"/></w:pPr>'
-                : '') +
-            '<w:r> \
-				<w:rPr>' +
-            (this._size ? '<w:sz w:val="' + this._size + '"/>' : '') +
-            (this._bold ? '<w:b/>' : '') +
-            (this._italic ? '<w:i/>' : '') +
-            (this._underline ? '<w:u w:val="single"/>' : '') +
-            (this._font
-                ? '<w:rFonts w:hAnsi="' +
-                  this._font +
-                  '" w:ascii="' +
-                  this._font +
-                  '"/>'
-                : '') +
-            '</w:rPr> \
-				<w:t>[CONTENT]</w:t> \
-			</w:r> \
-		</w:p>';
-
-        this._builder.push(p.replace('[CONTENT]', text));
-    };
-
-    this.insertRaw = function(xml) {
-        this._builder.push(xml);
-    };
-
-    this._replaceRIds = function(xml, replacements) {
+    function replaceRIds(xml, replacements) {
         var xmlBuilder = [];
         var startingIndex = 0;
         for (var i = 0; i < xml.length; i++) {
@@ -222,9 +55,9 @@ function Document() {
         }
 
         return xmlBuilder.join('');
-    };
+    }
 
-    this._utf8ArrayToString = function(array) {
+    function utf8ArrayToString(array) {
         var out, i, len, c;
         var char2, char3;
 
@@ -267,20 +100,182 @@ function Document() {
         }
 
         return out;
+    }
+
+    this.beginHeader = function() {
+        builder = header;
     };
 
-    this.rels = [];
+    this.endHeader = function() {
+        builder = body;
+    };
+
+    this.beginFooter = function() {
+        builder = footer;
+    };
+
+    this.endFooter = function() {
+        builder = body;
+    };
+
+    this.setBold = function() {
+        bold = true;
+    };
+
+    this.unsetBold = function() {
+        bold = false;
+    };
+
+    this.setItalic = function() {
+        italic = true;
+    };
+
+    this.unsetItalic = function() {
+        italic = false;
+    };
+
+    this.setUnderline = function() {
+        underline = true;
+    };
+
+    this.unsetUnderline = function() {
+        underline = false;
+    };
+
+    this.setFont = function(font) {
+        font = font;
+    };
+
+    this.unsetFont = function() {
+        font = null;
+    };
+
+    this.setSize = function(size) {
+        size = size;
+    };
+
+    this.unsetSize = function() {
+        size = null;
+    };
+
+    this.rightAlign = function() {
+        alignment = 'right';
+    };
+
+    this.centerAlign = function() {
+        alignment = 'center';
+    };
+
+    this.leftAlign = function() {
+        alignment = null;
+    };
+
+    this.insertPageBreak = function() {
+        var pb = '<w:p> \
+					<w:r> \
+						<w:br w:type="page"/> \
+					</w:r> \
+				  </w:p>';
+
+        builder.push(pb);
+    };
+
+    this.beginTable = function(options) {
+        if (!options) {
+            builder.push('<w:tbl>');
+        } else {
+            options = options || { borderSize: 4, borderColor: 'auto' };
+            builder.push(
+                '<w:tbl><w:tblPr><w:tblBorders> \
+				<w:top w:val="single" w:space="0" w:color="' +
+                    options.borderColor +
+                    '" w:sz="' +
+                    options.borderSize +
+                    '"/> \
+				<w:left w:val="single" w:space="0" w:color="' +
+                    options.borderColor +
+                    '" w:sz="' +
+                    options.borderSize +
+                    '"/> \
+				<w:bottom w:val="single" w:space="0" w:color="' +
+                    options.borderColor +
+                    '" w:sz="' +
+                    options.borderSize +
+                    '"/> \
+				<w:right w:val="single" w:space="0" w:color="' +
+                    options.borderColor +
+                    '" w:sz="' +
+                    options.borderSize +
+                    '"/> \
+				<w:insideH w:val="single" w:space="0" w:color="' +
+                    options.borderColor +
+                    '" w:sz="' +
+                    options.borderSize +
+                    '"/> \
+				<w:insideV w:val="single" w:space="0" w:color="' +
+                    options.borderColor +
+                    '" w:sz="' +
+                    options.borderSize +
+                    '"/> \
+				</w:tblBorders>	\
+			</w:tblPr>'
+            );
+        }
+    };
+
+    this.insertRow = function() {
+        builder.push('<w:tr><w:tc>');
+    };
+
+    this.nextColumn = function() {
+        builder.push('</w:tc><w:tc>');
+    };
+
+    this.nextRow = function() {
+        builder.push('</w:tc></w:tr><w:tr><w:tc>');
+    };
+
+    this.endTable = function() {
+        builder.push('</w:tc></w:tr></w:tbl>');
+    };
+
+    this.insertText = function(text) {
+        var p =
+            '<w:p>' +
+            (alignment
+                ? '<w:pPr><w:jc w:val="' + alignment + '"/></w:pPr>'
+                : '') +
+            '<w:r> \
+				<w:rPr>' +
+            (size ? '<w:sz w:val="' + size + '"/>' : '') +
+            (bold ? '<w:b/>' : '') +
+            (italic ? '<w:i/>' : '') +
+            (underline ? '<w:u w:val="single"/>' : '') +
+            (font
+                ? '<w:rFonts w:hAnsi="' + font + '" w:ascii="' + font + '"/>'
+                : '') +
+            '</w:rPr> \
+				<w:t>[CONTENT]</w:t> \
+			</w:r> \
+		</w:p>';
+
+        builder.push(p.replace('[CONTENT]', text));
+    };
+
+    this.insertRaw = function(xml) {
+        builder.push(xml);
+    };
 
     this.getExternalDocxRawXml = function(docxData) {
         var zip = new JSZip(docxData);
 
-        var xml = this._utf8ArrayToString(
+        var xml = utf8ArrayToString(
             zip.file('word/document.xml')._data.getContent()
         );
         xml = xml.substring(xml.indexOf('<w:body>') + 8);
         xml = xml.substring(0, xml.indexOf('</w:body>'));
 
-        var relsXml = this._utf8ArrayToString(
+        var relsXml = utf8ArrayToString(
             zip.file('word/_rels/document.xml.rels')._data.getContent()
         );
         var replacements = null;
@@ -315,7 +310,7 @@ function Document() {
                 newTarget = newTarget.join('/');
             }
 
-            this.rels.push({
+            rels.push({
                 id: id,
                 newId: newId,
                 data: zip.file(zipPath)._data.getContent(),
@@ -330,7 +325,7 @@ function Document() {
             replacements[id] = newId;
         }
 
-        if (replacements) xml = this._replaceRIds(xml, replacements);
+        if (replacements) xml = replaceRIds(xml, replacements);
 
         return xml;
     };
@@ -338,19 +333,6 @@ function Document() {
     this.insertDocxSync = function(data) {
         var xml = this.getExternalDocxRawXml(data);
         this.insertRaw(xml);
-    };
-
-    this.insertDocx = function(path, callback) {
-        var _this = this;
-
-        fs.readFile(path, 'binary', function(e, data) {
-            if (e) callback(e);
-            else {
-                var xml = _this.getExternalDocxRawXml(data);
-                _this.insertRaw(xml);
-                callback(null);
-            }
-        });
     };
 
     this.render = function(template, generatedType) {
@@ -361,11 +343,11 @@ function Document() {
         var zip = new JSZip(template);
         var filesToSave = {};
 
-        if (this.rels.length > 0) {
+        if (rels.length > 0) {
             var relsXmlBuilder = [];
 
-            for (var i = 0; i < this.rels.length; i++) {
-                var rel = this.rels[i];
+            for (var i = 0; i < rels.length; i++) {
+                var rel = rels[i];
                 var saveTo = rel.newTarget.startsWith('../')
                     ? rel.newTarget.substring(3)
                     : 'word/' + rel.newTarget;
@@ -388,9 +370,7 @@ function Document() {
                         (filesToSave[saveTo] || zipFile) &&
                         !rel.target.startsWith('theme/')
                     ) {
-                        var xml = this._utf8ArrayToString(rel.data).substring(
-                            1
-                        );
+                        var xml = utf8ArrayToString(rel.data).substring(1);
                         xml = xml.substring(xml.indexOf('<'));
                         xml = xml.substring(xml.indexOf('>') + 1);
 
@@ -398,11 +378,10 @@ function Document() {
 
                         var mergedXml =
                             filesToSave[saveTo] ||
-                            this._utf8ArrayToString(zipFile._data.getContent());
+                            utf8ArrayToString(zipFile._data.getContent());
                         mergedXml = mergedXml.replace(closingTag, xml);
                         filesToSave[saveTo] = mergedXml;
-                    } else
-                        filesToSave[saveTo] = this._utf8ArrayToString(rel.data);
+                    } else filesToSave[saveTo] = utf8ArrayToString(rel.data);
                 } else console.log('Cannot merge file ' + filename);
             }
 
@@ -426,9 +405,9 @@ function Document() {
         var doc = new Docxtemplater().loadZip(zip);
 
         doc.setData({
-            body: this._body.join(''),
-            header: this._header.join(''),
-            footer: this._footer.join('')
+            body: body.join(''),
+            header: header.join(''),
+            footer: footer.join('')
         });
         doc.render();
 
