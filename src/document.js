@@ -277,20 +277,12 @@ function Document() {
 
         if (options && options.orientation) {
             builder.push(
-                '        <w:pgSz w:orient="[ORIENT]" />'.replace(
-                    '[ORIENT]',
-                    options.orientation
-                )
+                `        <w:pgSz w:orient="${options.orientation}" />`
             );
         }
 
         if (options && options.type) {
-            builder.push(
-                '        <w:type w:val="[TYPE]" />'.replace(
-                    '[TYPE]',
-                    options.type
-                )
-            );
+            builder.push(`        <w:type w:val="${options.type}" />`);
         }
 
         builder.push(endSection);
