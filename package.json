@@ -4,6 +4,7 @@
     "description": "Easily create or merge DOCX files from Node.js",
     "main": "dist/index.js",
     "scripts": {
+        "install": "npm run build",
         "build": "babel src --out-dir dist"
     },
     "repository": {
