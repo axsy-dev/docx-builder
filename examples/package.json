@@ -1,0 +1,10 @@
+{
+    "name": "examples",
+    "version": "1.0.0",
+    "description": "",
+    "author": "Colin Carter <colin.carter@axsy.com>",
+    "license": "ISC",
+    "devDependencies": {
+        "docx-builder": "git+https://github.com/axsy-dev/docx-builder.git"
+    }
+}
