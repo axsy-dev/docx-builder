@@ -2,6 +2,7 @@
 
 var JSZip = require('jszip');
 var Docxtemplater = require('docxtemplater');
+var xmldom = require('xmldom');
 
 module.exports = Document;
 
@@ -91,6 +92,28 @@ function Document() {
         }
 
         return out;
+    }
+
+    function normalizeBody(body) {
+        var doc = new xmldom.DOMParser().parseFromString(body);
+        var sectPrs = doc.getElementsByTagName('w:sectPr');
+
+        if (sectPrs.length > 1) {
+            for (var i = 0; i < sectPrs.length; i++) {
+                var node = sectPrs[0];
+                if (node.firstChild.tagName !== 'w:headerReference' || node.firstChild.tagName !== 'w:footerReference') {
+                    node.parentNode.removeChild(node);
+                }
+            }
+
+            var serializer = new xmldom.XMLSerializer();
+            body = serializer.serializeToString(doc);
+
+            // A namespace is added to each node.  This removes it.
+            body = body.replace(/xmlns\:\w+\=\"\w*\"/g, '');
+        }
+
+        return body;
     }
 
     this.beginHeader = function () {
@@ -349,7 +372,7 @@ function Document() {
         var doc = new Docxtemplater().loadZip(zip);
 
         doc.setData({
-            body: body.join(''),
+            body: normalizeBody(body.join('')),
             header: header.join(''),
             footer: footer.join('')
         });
