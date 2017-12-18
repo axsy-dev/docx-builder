@@ -35,7 +35,12 @@ function Document() {
         var xmlBuilder = [];
         var startingIndex = 0;
         for (var i = 0; i < xml.length; i++) {
-            if (xml[i] == '"' && xml[i + 1] == 'r' && xml[i + 2] == 'I' && xml[i + 3] == 'd') {
+            if (
+                xml[i] == '"' &&
+                xml[i + 1] == 'r' &&
+                xml[i + 2] == 'I' &&
+                xml[i + 3] == 'd'
+            ) {
                 var oldRId = ['rId'];
                 i = i + 4;
                 while (xml[i] != '"') {
@@ -80,13 +85,19 @@ function Document() {
                 case 13:
                     // 110x xxxx   10xx xxxx
                     char2 = array[i++];
-                    out += String.fromCharCode((c & 0x1f) << 6 | char2 & 0x3f);
+                    out += String.fromCharCode(
+                        ((c & 0x1f) << 6) | (char2 & 0x3f)
+                    );
                     break;
                 case 14:
                     // 1110 xxxx  10xx xxxx  10xx xxxx
                     char2 = array[i++];
                     char3 = array[i++];
-                    out += String.fromCharCode((c & 0x0f) << 12 | (char2 & 0x3f) << 6 | (char3 & 0x3f) << 0);
+                    out += String.fromCharCode(
+                        ((c & 0x0f) << 12) |
+                            ((char2 & 0x3f) << 6) |
+                            ((char3 & 0x3f) << 0)
+                    );
                     break;
             }
         }
@@ -101,7 +112,10 @@ function Document() {
         if (sectPrs.length > 1) {
             for (var i = 0; i < sectPrs.length; i++) {
                 var node = sectPrs[0];
-                if (node.firstChild.tagName !== 'w:headerReference' || node.firstChild.tagName !== 'w:footerReference') {
+                if (
+                    node.firstChild.tagName !== 'w:headerReference' ||
+                    node.firstChild.tagName !== 'w:footerReference'
+                ) {
                     node.parentNode.removeChild(node);
                 }
             }
@@ -116,75 +130,75 @@ function Document() {
         return body;
     }
 
-    this.beginHeader = function () {
+    this.beginHeader = function() {
         builder = header;
     };
 
-    this.endHeader = function () {
+    this.endHeader = function() {
         builder = body;
     };
 
-    this.beginFooter = function () {
+    this.beginFooter = function() {
         builder = footer;
     };
 
-    this.endFooter = function () {
+    this.endFooter = function() {
         builder = body;
     };
 
-    this.setBold = function () {
+    this.setBold = function() {
         bold = true;
     };
 
-    this.unsetBold = function () {
+    this.unsetBold = function() {
         bold = false;
     };
 
-    this.setItalic = function () {
+    this.setItalic = function() {
         italic = true;
     };
 
-    this.unsetItalic = function () {
+    this.unsetItalic = function() {
         italic = false;
     };
 
-    this.setUnderline = function () {
+    this.setUnderline = function() {
         underline = true;
     };
 
-    this.unsetUnderline = function () {
+    this.unsetUnderline = function() {
         underline = false;
     };
 
-    this.setFont = function (font) {
+    this.setFont = function(font) {
         font = font;
     };
 
-    this.unsetFont = function () {
+    this.unsetFont = function() {
         font = null;
     };
 
-    this.setSize = function (size) {
+    this.setSize = function(size) {
         size = size;
     };
 
-    this.unsetSize = function () {
+    this.unsetSize = function() {
         size = null;
     };
 
-    this.rightAlign = function () {
+    this.rightAlign = function() {
         alignment = 'right';
     };
 
-    this.centerAlign = function () {
+    this.centerAlign = function() {
         alignment = 'center';
     };
 
-    this.leftAlign = function () {
+    this.leftAlign = function() {
         alignment = null;
     };
 
-    this.insertPageBreak = function () {
+    this.insertPageBreak = function() {
         var pb = '<w:p> \
 					<w:r> \
 						<w:br w:type="page"/> \
@@ -194,42 +208,81 @@ function Document() {
         builder.push(pb);
     };
 
-    this.beginTable = function (options) {
+    this.beginTable = function(options) {
         if (!options) {
             builder.push('<w:tbl>');
         } else {
             options = options || { borderSize: 4, borderColor: 'auto' };
-            builder.push('<w:tbl><w:tblPr><w:tblBorders> \
-				<w:top w:val="single" w:space="0" w:color="' + options.borderColor + '" w:sz="' + options.borderSize + '"/> \
-				<w:left w:val="single" w:space="0" w:color="' + options.borderColor + '" w:sz="' + options.borderSize + '"/> \
-				<w:bottom w:val="single" w:space="0" w:color="' + options.borderColor + '" w:sz="' + options.borderSize + '"/> \
-				<w:right w:val="single" w:space="0" w:color="' + options.borderColor + '" w:sz="' + options.borderSize + '"/> \
-				<w:insideH w:val="single" w:space="0" w:color="' + options.borderColor + '" w:sz="' + options.borderSize + '"/> \
-				<w:insideV w:val="single" w:space="0" w:color="' + options.borderColor + '" w:sz="' + options.borderSize + '"/> \
+            builder.push(
+                '<w:tbl><w:tblPr><w:tblBorders> \
+				<w:top w:val="single" w:space="0" w:color="' +
+                    options.borderColor +
+                    '" w:sz="' +
+                    options.borderSize +
+                    '"/> \
+				<w:left w:val="single" w:space="0" w:color="' +
+                    options.borderColor +
+                    '" w:sz="' +
+                    options.borderSize +
+                    '"/> \
+				<w:bottom w:val="single" w:space="0" w:color="' +
+                    options.borderColor +
+                    '" w:sz="' +
+                    options.borderSize +
+                    '"/> \
+				<w:right w:val="single" w:space="0" w:color="' +
+                    options.borderColor +
+                    '" w:sz="' +
+                    options.borderSize +
+                    '"/> \
+				<w:insideH w:val="single" w:space="0" w:color="' +
+                    options.borderColor +
+                    '" w:sz="' +
+                    options.borderSize +
+                    '"/> \
+				<w:insideV w:val="single" w:space="0" w:color="' +
+                    options.borderColor +
+                    '" w:sz="' +
+                    options.borderSize +
+                    '"/> \
 				</w:tblBorders>	\
-			</w:tblPr>');
+			</w:tblPr>'
+            );
         }
     };
 
-    this.insertRow = function () {
+    this.insertRow = function() {
         builder.push('<w:tr><w:tc>');
     };
 
-    this.nextColumn = function () {
+    this.nextColumn = function() {
         builder.push('</w:tc><w:tc>');
     };
 
-    this.nextRow = function () {
+    this.nextRow = function() {
         builder.push('</w:tc></w:tr><w:tr><w:tc>');
     };
 
-    this.endTable = function () {
+    this.endTable = function() {
         builder.push('</w:tc></w:tr></w:tbl>');
     };
 
-    this.insertText = function (text) {
-        var p = '<w:p>' + (alignment ? '<w:pPr><w:jc w:val="' + alignment + '"/></w:pPr>' : '') + '<w:r> \
-				<w:rPr>' + (size ? '<w:sz w:val="' + size + '"/>' : '') + (bold ? '<w:b/>' : '') + (italic ? '<w:i/>' : '') + (underline ? '<w:u w:val="single"/>' : '') + (font ? '<w:rFonts w:hAnsi="' + font + '" w:ascii="' + font + '"/>' : '') + '</w:rPr> \
+    this.insertText = function(text) {
+        var p =
+            '<w:p>' +
+            (alignment
+                ? '<w:pPr><w:jc w:val="' + alignment + '"/></w:pPr>'
+                : '') +
+            '<w:r> \
+				<w:rPr>' +
+            (size ? '<w:sz w:val="' + size + '"/>' : '') +
+            (bold ? '<w:b/>' : '') +
+            (italic ? '<w:i/>' : '') +
+            (underline ? '<w:u w:val="single"/>' : '') +
+            (font
+                ? '<w:rFonts w:hAnsi="' + font + '" w:ascii="' + font + '"/>'
+                : '') +
+            '</w:rPr> \
 				<w:t>[CONTENT]</w:t> \
 			</w:r> \
 		</w:p>';
@@ -237,19 +290,23 @@ function Document() {
         builder.push(p.replace('[CONTENT]', text));
     };
 
-    this.insertSection = function (options) {
-        var startSection = '<w:p> \
+    this.insertSection = function(options) {
+        var startSection =
+            '<w:p> \
                 <w:pPr> \
                     <w:sectPr>';
 
-        var endSection = '      </w:sectPr> \
+        var endSection =
+            '      </w:sectPr> \
                 </w:pPr> \
              </w:p>';
 
         builder.push(startSection);
 
         if (options && options.orientation) {
-            builder.push('        <w:pgSz w:orient="' + options.orientation + '" />');
+            builder.push(
+                '        <w:pgSz w:orient="' + options.orientation + '" />'
+            );
         }
 
         if (options && options.type) {
@@ -259,18 +316,22 @@ function Document() {
         builder.push(endSection);
     };
 
-    this.insertRaw = function (xml) {
+    this.insertRaw = function(xml) {
         builder.push(xml);
     };
 
-    this.getExternalDocxRawXml = function (docxData) {
+    this.getExternalDocxRawXml = function(docxData) {
         var zip = new JSZip(docxData);
 
-        var xml = utf8ArrayToString(zip.file('word/document.xml')._data.getContent());
+        var xml = utf8ArrayToString(
+            zip.file('word/document.xml')._data.getContent()
+        );
         xml = xml.substring(xml.indexOf('<w:body>') + 8);
         xml = xml.substring(0, xml.indexOf('</w:body>'));
 
-        var relsXml = utf8ArrayToString(zip.file('word/_rels/document.xml.rels')._data.getContent());
+        var relsXml = utf8ArrayToString(
+            zip.file('word/_rels/document.xml.rels')._data.getContent()
+        );
         var replacements = null;
 
         while (relsXml.indexOf('<Relationship') != -1) {
@@ -282,8 +343,13 @@ function Document() {
             relsXml = relsXml.substring(relsXml.indexOf('Target="') + 8);
             var target = relsXml.substring(0, relsXml.indexOf('"'));
 
-            var filename = target.indexOf('/') != -1 ? target.substring(target.lastIndexOf('/') + 1) : target;
-            var zipPath = target.startsWith('../') ? target.substring(3) : 'word/' + target;
+            var filename =
+                target.indexOf('/') != -1
+                    ? target.substring(target.lastIndexOf('/') + 1)
+                    : target;
+            var zipPath = target.startsWith('../')
+                ? target.substring(3)
+                : 'word/' + target;
 
             var newId = systemXmlRelIds[filename];
             var newTarget = target;
@@ -293,7 +359,8 @@ function Document() {
                 var rand = hrtime[0] + '' + hrtime[1];
                 newId = id + '_' + rand;
                 newTarget = target.split('/');
-                newTarget[newTarget.length - 1] = rand + '_' + newTarget[newTarget.length - 1];
+                newTarget[newTarget.length - 1] =
+                    rand + '_' + newTarget[newTarget.length - 1];
                 newTarget = newTarget.join('/');
             }
 
@@ -317,12 +384,12 @@ function Document() {
         return xml;
     };
 
-    this.insertDocxSync = function (data) {
+    this.insertDocxSync = function(data) {
         var xml = this.getExternalDocxRawXml(data);
         this.insertRaw(xml);
     };
 
-    this.render = function (template, generatedType) {
+    this.render = function(template, generatedType) {
         if (!generatedType) {
             generatedType = 'base64';
         }
@@ -335,22 +402,37 @@ function Document() {
 
             for (var i = 0; i < rels.length; i++) {
                 var rel = rels[i];
-                var saveTo = rel.newTarget.startsWith('../') ? rel.newTarget.substring(3) : 'word/' + rel.newTarget;
+                var saveTo = rel.newTarget.startsWith('../')
+                    ? rel.newTarget.substring(3)
+                    : 'word/' + rel.newTarget;
 
                 if (rel.target != rel.newTarget) {
                     zip.file(saveTo, rel.data);
-                    relsXmlBuilder.push('<Relationship Id="' + rel.newId + '" Type="' + rel.type + '" Target="' + rel.newTarget + '"/>');
+                    relsXmlBuilder.push(
+                        '<Relationship Id="' +
+                            rel.newId +
+                            '" Type="' +
+                            rel.type +
+                            '" Target="' +
+                            rel.newTarget +
+                            '"/>'
+                    );
                 } else if (rel.filename.endsWith('.xml')) {
                     var zipFile = zip.file(rel.zipPath);
 
-                    if ((filesToSave[saveTo] || zipFile) && !rel.target.startsWith('theme/')) {
+                    if (
+                        (filesToSave[saveTo] || zipFile) &&
+                        !rel.target.startsWith('theme/')
+                    ) {
                         var xml = utf8ArrayToString(rel.data).substring(1);
                         xml = xml.substring(xml.indexOf('<'));
                         xml = xml.substring(xml.indexOf('>') + 1);
 
                         var closingTag = xml.substring(xml.lastIndexOf('</'));
 
-                        var mergedXml = filesToSave[saveTo] || utf8ArrayToString(zipFile._data.getContent());
+                        var mergedXml =
+                            filesToSave[saveTo] ||
+                            utf8ArrayToString(zipFile._data.getContent());
                         mergedXml = mergedXml.replace(closingTag, xml);
                         filesToSave[saveTo] = mergedXml;
                     } else filesToSave[saveTo] = utf8ArrayToString(rel.data);
@@ -358,9 +440,14 @@ function Document() {
             }
 
             if (relsXmlBuilder.length > 0) {
-                var relsXml = this._utf8ArrayToString(zip.file('word/_rels/document.xml.rels')._data.getContent());
+                var relsXml = this._utf8ArrayToString(
+                    zip.file('word/_rels/document.xml.rels')._data.getContent()
+                );
                 relsXmlBuilder.push('</Relationships>');
-                relsXml = relsXml.replace('</Relationships>', relsXmlBuilder.join(''));
+                relsXml = relsXml.replace(
+                    '</Relationships>',
+                    relsXmlBuilder.join('')
+                );
                 zip.file('word/_rels/document.xml.rels', relsXml);
             }
 

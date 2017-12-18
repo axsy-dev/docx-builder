@@ -1,6 +1,6 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
     value: true
 });
 exports.save = save;
@@ -20,7 +20,7 @@ function insertDocxSync(docx, path) {
 }
 
 function insertDocx(docx, path, callback) {
-    fs.readFile(path, 'binary', function (e, data) {
+    fs.readFile(path, 'binary', function(e, data) {
         if (e) {
             return callback(e);
         }
