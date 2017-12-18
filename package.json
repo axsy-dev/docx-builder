@@ -21,7 +21,8 @@
     "author": "Raúl Alberto Bojalil Becerra <me@raulbojalil.com>",
     "dependencies": {
         "docxtemplater": "3.0.11",
-        "jszip": "2.6.1"
+        "jszip": "2.6.1",
+        "xmldom": "^0.1.27"
     },
     "bugs": {
         "url": "https://github.com/axsy-dev/docx-builder/issues"
