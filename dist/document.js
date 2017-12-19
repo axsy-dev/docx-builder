@@ -15,7 +15,9 @@ var systemXmlRelIds = {
     'header1.xml': 'rId6',
     'footer1.xml': 'rId7',
     'fontTable.xml': 'rId8',
-    'theme1.xml': 'rId9'
+    'theme1.xml': 'rId9',
+    'footer2.xml': 'rId10',
+    'numbering.xml': 'rId11'
 };
 
 function Document() {
