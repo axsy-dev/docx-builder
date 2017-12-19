@@ -438,7 +438,7 @@ function Document() {
             }
 
             if (relsXmlBuilder.length > 0) {
-                var relsXml = this._utf8ArrayToString(
+                var relsXml = utf8ArrayToString(
                     zip.file('word/_rels/document.xml.rels')._data.getContent()
                 );
                 relsXmlBuilder.push('</Relationships>');
